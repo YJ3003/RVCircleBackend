@@ -18,16 +18,16 @@ def summarize():
         comments = data.get("comments_text", "").split("\n")
         
         prompt = f"""
-You are an intelligent comment summarizer and clusterer.
+You are an intelligent comment summarizer and clusterer, with a strong focus on sentiment analysis.
 
 Task:
 1. Read the post and its associated list of comments.
-2. Group the comments into similar types or topics (e.g., questions, agreement, suggestions, etc.).
-3. From each group, select the most representative or relevant comment.
-4. Choose up to 5 such representative comments across the most common or impactful types.
-5. Order the top 5 selected comments so that the most frequently discussed type appears first.
-6. Assign a relevance score (between 0 and 1) to each selected comment.
-7. Finally, write a concise summary explaining the overall direction and themes of these comments.
+2. Classify each comment into types (e.g., suggestions, agreement, questions, complaints) **and analyze sentiment** (positive, neutral, negative).
+3. Among these, give **highest priority to positive comments** that are constructive, appreciative, or supportive.
+4. Select the most representative or relevant comment from the top positive clusters.
+5. If there are not enough positive comments, then choose the most impactful ones from other types.
+6. Choose up to 5 such representative comments, ordered with **positive ones first**, and assign a relevance score (between 0 and 1) based on positivity, clarity, and usefulness.
+7. Write a **concise summary** reflecting the main tone (especially positive feedback) and themes from these comments.
 
 POST:
 {post}
@@ -44,8 +44,8 @@ Return the response in the following JSON format:
   "summary": "Your summary here"
 }}
 
-If there are fewer than 5 distinct comment types, include only as many as are available.
-Do not fabricate new comments if the list is empty—just return an appropriate message in the summary.
+If no comments exist, return a summary stating that no comments were available.
+Do not fabricate or guess missing data.
 """
 
         response = ai.prompt(message=prompt)
