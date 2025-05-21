@@ -3,6 +3,7 @@ from flask_cors import CORS
 from meta_ai_api import MetaAI
 import json
 import re
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -64,4 +65,5 @@ Do not fabricate new comments if the list is empty—just return an appropriate 
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Required for Render
+    app.run(host="0.0.0.0", port=port)
